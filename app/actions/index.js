@@ -1,4 +1,4 @@
-import { facebookLogin, facebookLogout } from '../utils/facebookAPI.js';
+import { facebookLogin, facebookLogout, checkAccessToken, getInfo } from '../utils/facebookAPI.js';
 
 export function attempt() {
     return {
@@ -36,14 +36,34 @@ export function addUser(id, name, profileURL, profileWidth, profileHeight) {
     };
 }
 
+function getUserInfo(dispatch) {
+    console.log('getting user info');
+    getInfo().then((result) => {
+        dispatch(loggedin());
+        dispatch(addUser(result.id, result.name, result.picture.data.url, result.picture.data.width, result.picture.data.height));
+    }).catch((err) => {
+        dispatch(errors(err));
+    });
+}
+
 export function login() {
     return dispatch => {
         dispatch(attempt());
-        facebookLogin().then((result) => {
-            dispatch(loggedin());
-            dispatch(addUser(result.id, result.name, result.picture.data.url, result.picture.data.width, result.picture.data.height));
+        facebookLogin().then(() => {
+            getUserInfo(dispatch);
         }).catch((err) => {
             dispatch(errors(err));
+        });
+    };
+}
+
+export function checkIfLoggedIn() {
+    return dispatch => {
+        checkAccessToken().then((result) => {
+            console.log('found access token ', result);
+            getUserInfo(dispatch);
+        }).catch((err) => {
+            console.log('no access token found', err);
         });
     };
 }

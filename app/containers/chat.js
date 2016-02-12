@@ -23,6 +23,9 @@ const styles = StyleSheet.create({
 });
 
 class Chat extends Component {
+    componentDidMount() {
+        this.props.actions.checkIfLoggedIn();
+    }
     render() {
         const { actions, login, profile } = this.props;
         let profileComponent = <Profile onPress={() => actions.logout()} profile={profile} />;
