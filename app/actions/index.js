@@ -59,6 +59,7 @@ export function login() {
 
 export function checkIfLoggedIn() {
     return dispatch => {
+        dispatch(attempt());
         checkAccessToken().then((result) => {
             console.log('found access token ', result);
             getUserInfo(dispatch);
