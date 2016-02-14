@@ -33,7 +33,7 @@ export default class InputField extends Component {
                 <TextInput style={styles.textInput}
                     onChangeText={(text) => this.setState({text})}
                     onSubmitEditing={() => {
-                        this.props.actions.sendMessage(this.state.text);
+                        this.props.actions.sendMessage(this.props.profile.id, this.state.text, this.props.profile.profileURL);
                         this.setState({text: ''});
                     }
                     }
@@ -44,5 +44,6 @@ export default class InputField extends Component {
 }
 
 InputField.propTypes = {
-    actions: PropTypes.object.isRequired
+    actions: PropTypes.object.isRequired,
+    profile: PropTypes.object
 };

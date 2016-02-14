@@ -25,9 +25,9 @@ export default class Chatter extends Component {
         return (
             <View style={styles.wrapper}>
                 {this.props.chat.map((msg, i) => {
-                    return <Message msg={msg} key={i}/>;
+                    return <Message msg={msg} profile={this.props.profile} key={i}/>;
                 })}
-                <InputField actions={this.props.actions}/>
+                <InputField actions={this.props.actions} profile={this.props.profile} />
             </View>
         );
     }
@@ -36,5 +36,6 @@ export default class Chatter extends Component {
 
 Chatter.propTypes = {
     actions: PropTypes.object.isRequired,
-    chat: PropTypes.array.isRequired
+    chat: PropTypes.array.isRequired,
+    profile: PropTypes.object
 };

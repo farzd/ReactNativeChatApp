@@ -51,6 +51,7 @@ class Chat extends Component {
         this.props.actions.checkIfLoggedIn();
     }
     render() {
+        console.log('props', this.props);
         const { actions, login, profile, chat } = this.props;
         let loginComponent = <Login onPress={() => actions.login()} />;
 
@@ -80,7 +81,7 @@ class Chat extends Component {
                             <Text style={styles.navLogout}>logout</Text>
                         </TouchableOpacity> : null}
                 </View>
-            { login.loggedIn ? <Chatter actions={actions} chat={chat}/> : loginComponent }
+            { login.loggedIn ? <Chatter actions={actions} chat={chat} profile={profile}/> : loginComponent }
             </View>
         );
     }
