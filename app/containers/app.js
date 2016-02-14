@@ -10,8 +10,7 @@ import Chat from './chat';
 const loggerMiddleware = createLogger();
 
 const createStoreWithMiddleware = applyMiddleware(
-  thunkMiddleware,
-  loggerMiddleware
+  thunkMiddleware
 )(createStore);
 
 const store = createStoreWithMiddleware(reducer);

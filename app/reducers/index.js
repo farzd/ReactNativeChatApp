@@ -48,9 +48,21 @@ function profileReducer(state = { id: null, name: null, profileURL: null, profil
     }
 }
 
+
+function chatReducer(state = [], action) {
+    switch (action.type) {
+    case 'MSG_IN':
+        return state.concat([action.msg]);
+
+    default:
+        return state;
+    }
+}
+
 export default function reducers(state = {}, action) {
     return {
         login: loginReducer(state.login, action),
-        profile: profileReducer(state.profile, action)
+        profile: profileReducer(state.profile, action),
+        chat: chatReducer(state.chat, action)
     };
 }
