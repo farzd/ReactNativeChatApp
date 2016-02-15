@@ -12,8 +12,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#7991E9',
         flex: 1,
         flexDirection: 'column',
-        position: 'relative',
-        justifyContent: 'center',
+        position: 'relative'
     },
     text: {
         fontSize: 20,
@@ -50,8 +49,8 @@ class Chat extends Component {
     componentDidMount() {
         this.props.actions.checkIfLoggedIn();
     }
+
     render() {
-        console.log('props', this.props);
         const { actions, login, profile, chat } = this.props;
         let loginComponent = <Login onPress={() => actions.login()} />;
 
@@ -64,7 +63,7 @@ class Chat extends Component {
         }
 
         let navBarTitleAlign = { justifyContent: 'center' };
-        let wrapperAlign = { alignItems: 'center' };
+        let wrapperAlign = { alignItems: 'center', justifyContent: 'center' };
 
         if (login.loggedIn) {
             navBarTitleAlign = { justifyContent: 'space-between' };

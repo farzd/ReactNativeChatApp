@@ -27,8 +27,8 @@ export function connectChat() {
     };
 }
 
-export function sendMessage(userid, msg, profileURL) {
+export function sendMessage(userid, username, msg, profileURL) {
     return dispatch => {
-        ws.send(userid + '{<>}' + msg + '{<>}' + profileURL);
+        ws.send(userid + '{<>}' + username + '{<>}' + msg + '{<>}' + profileURL);
     };
 }

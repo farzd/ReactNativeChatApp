@@ -34,51 +34,51 @@ const styles = StyleSheet.create({
         borderRadius: 18,
         alignSelf: 'flex-start',
         marginTop: 10
-    },
-    avatarLeft: {
-
-    },
-    avatarRight: {
-
     }
 });
+
+const serverImg = require('./assets/anon.jpg');
 
 export default class Message extends Component {
     render() {
         const { msg, profile } = this.props;
         const dilem = '{<>}';
-        const message = msg.split(dilem);
-        const userBg = { backgroundColor: message[3] };
+        const messageSplit = msg.split(dilem);
+        const message = {
+            id: messageSplit[0],
+            text: messageSplit[1],
+            url: messageSplit[2],
+            color: messageSplit[3]
+        };
 
-        if (profile.id === message[0]) {
+        if (profile.id === message.id) {
             let overflowHack = {};
-            if (message[1].length >= 45) {
-                overflowHack = {flex: 1};
+            if (message.text.length >= 45) {
+                overflowHack = { flex: 1 };
             }
             return (
                 <View style={[styles.bubbleWrapper, styles.bubbleWrapperRight]}>
                     <View style={overflowHack}>
-                        <Text style={ [styles.speechBubble, userBg, styles.bubbleRight] }>
-                            {message[1]}
+                        <Text style={[styles.speechBubble, styles.bubbleRight]}>
+                            { message.text }
                         </Text>
                     </View>
-                    <Image style={[styles.avatar, styles.avatarRight]} source={{uri: message[2] }} />
+                    <Image style={[styles.avatar, styles.avatarRight]} source={{uri: message.url }} />
                 </View>
             );
         }
 
         let overflowHack = {};
-        if (message[1].length >= 45) {
-            overflowHack = {flex: 1};
+        if (message.text.length >= 45) {
+            overflowHack = { flex: 1 };
         }
-        const req = require('./assets/miranda.jpg');
-        const userimg = message[2] ? {uri: message[2]} : req;
+        const speechBubbleColor = { backgroundColor: message.color };
         return (
             <View style={[styles.bubbleWrapper, styles.bubbleWrapperLeft]}>
-                <Image style={[styles.avatar, styles.avatarLeft ]} source={userimg} />
+                <Image style={[styles.avatar, styles.avatarLeft ]} source={message.id === 'server' ? serverImg : {uri: message.url} }/>
                 <View style={overflowHack}>
-                    <Text style={ [styles.speechBubble, userBg, styles.bubbleLeft] }>
-                        {message[1]}
+                    <Text style={[styles.speechBubble, speechBubbleColor, styles.bubbleLeft]}>
+                        { message.text }
                     </Text>
                 </View>
             </View>
