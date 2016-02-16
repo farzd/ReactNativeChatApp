@@ -33,9 +33,21 @@ export default class Chatter extends Component {
     }
 
     componentDidMount() {
-        this.props.actions.connectChat();
+        const { actions, profile } = this.props;
+        console.log('connecting');
+        actions.connectChat();
+
+        setTimeout(function timout() {
+            // ping to say that you've join the chat room
+            actions.sendMessage(profile.id, profile.name, 'serverJOIN');
+        }, 10);
+
         DeviceEventEmitter.addListener('keyboardWillShow', this.keyboardWillShow.bind(this));
         DeviceEventEmitter.addListener('keyboardWillHide', this.keyboardWillHide.bind(this));
+    }
+
+    componentWillUnmount() {
+        this.props.actions.sendMessage(this.props.profile.id, this.props.profile.name, 'serverLEAVE');
     }
 
     keyboardWillShow(e) {

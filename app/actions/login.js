@@ -39,8 +39,8 @@ export function addUser(id, name, profileURL, profileWidth, profileHeight) {
 function getUserInfo(dispatch) {
     console.log('getting user info');
     getInfo().then((result) => {
-        dispatch(loggedin());
         dispatch(addUser(result.id, result.name, result.picture.data.url, result.picture.data.width, result.picture.data.height));
+        dispatch(loggedin());
     }).catch((err) => {
         dispatch(errors(err));
     });
