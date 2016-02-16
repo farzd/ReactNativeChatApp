@@ -5,7 +5,7 @@ import Dimensions from 'Dimensions';
 const windowHeight = Dimensions.get('window').height - 66;
 const scrollHeight = windowHeight - 50;
 
-const { StyleSheet, View, ScrollView, DeviceEventEmitter } = React;
+const { StyleSheet, View, ScrollView, DeviceEventEmitter, Animated } = React;
 const styles = StyleSheet.create({
     wrapper: {
         position: 'relative',
@@ -28,7 +28,7 @@ export default class Chatter extends Component {
         super(props);
 
         this.state = {
-            visibleHeight: windowHeight
+            visibleHeight: new Animated.Value(windowHeight),
         };
     }
 
@@ -52,11 +52,11 @@ export default class Chatter extends Component {
 
     keyboardWillShow(e) {
         const newSize = windowHeight - e.endCoordinates.height;
-        this.setState({visibleHeight: newSize});
+        Animated.timing(this.state.visibleHeight, {toValue: newSize, duration: 200}).start();
     }
 
     keyboardWillHide() {
-        this.setState({visibleHeight: windowHeight});
+        Animated.timing(this.state.visibleHeight, {toValue: windowHeight, duration: 10}).start();
     }
 
     updateScrollView(x, y) {
@@ -67,14 +67,14 @@ export default class Chatter extends Component {
 
     render() {
         return (
-            <View style={[styles.wrapper, {height: this.state.visibleHeight}]}>
+            <Animated.View style={[styles.wrapper, {height: this.state.visibleHeight}]}>
                 <ScrollView ref="scroller" style={styles.scrollWrapper} contentContainerStyle={styles.scrollContainer} onContentSizeChange={this.updateScrollView.bind(this)}>
                     {this.props.chat.map((msg, i) => {
                         return <Message msg={msg} profile={this.props.profile} key={i}/>;
                     })}
                 </ScrollView>
                 <InputField actions={this.props.actions} profile={this.props.profile} />
-            </View>
+            </Animated.View>
         );
     }
 }

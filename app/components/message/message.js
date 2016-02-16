@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react-native';
 
-const { StyleSheet, Text, View, Image } = React;
+const { StyleSheet, Text, View, Image, Animated, Easing } = React;
 const styles = StyleSheet.create({
     bubbleWrapper: {
         flexDirection: 'row',
@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         padding: 10,
         marginTop: 10,
-        marginBottom: 10,
+        marginBottom: 10
     },
     bubbleRight: {
         marginRight: 10
@@ -40,6 +40,14 @@ const styles = StyleSheet.create({
 const serverImg = require('./assets/anon.jpg');
 
 export default class Message extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            speechBubbleScale: new Animated.Value(0),
+        };
+    }
+
     render() {
         const { msg, profile } = this.props;
         const dilem = '{<>}';
@@ -51,6 +59,8 @@ export default class Message extends Component {
             color: messageSplit[3]
         };
 
+        Animated.timing(this.state.speechBubbleScale, {toValue: 1, duration: 200, easing: Easing.out(Easing.quad) }).start();
+
         if (profile.id === message.id) {
             let overflowHack = {};
             if (message.text.length >= 45) {
@@ -59,9 +69,9 @@ export default class Message extends Component {
             return (
                 <View style={[styles.bubbleWrapper, styles.bubbleWrapperRight]}>
                     <View style={overflowHack}>
-                        <Text style={[styles.speechBubble, styles.bubbleRight]}>
+                        <Animated.Text style={[styles.speechBubble, styles.bubbleRight, {transform: [{scale: this.state.speechBubbleScale}]}]}>
                             { message.text }
-                        </Text>
+                        </Animated.Text>
                     </View>
                     <Image style={[styles.avatar, styles.avatarRight]} source={{uri: message.url }} />
                 </View>
