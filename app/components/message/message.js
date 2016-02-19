@@ -3,37 +3,36 @@ import React, { Component, PropTypes } from 'react-native';
 const { StyleSheet, Text, View, Image, Animated, Easing } = React;
 const styles = StyleSheet.create({
     bubbleWrapper: {
-        flexDirection: 'row',
-        marginRight: 10,
-        marginLeft: 10
+        marginTop: 10,
+        marginBottom: 10,
+        marginLeft: 50,
+        marginRight: 50
     },
     bubbleWrapperLeft: {
-        justifyContent: 'flex-start'
+        alignItems: 'flex-start'
     },
     bubbleWrapperRight: {
-        justifyContent: 'flex-end'
+        alignItems: 'flex-end'
     },
     speechBubble: {
         fontSize: 14,
         color: '#fff',
-        backgroundColor: '#F974A0',
         borderRadius: 5,
-        padding: 10,
-        marginTop: 10,
-        marginBottom: 10
-    },
-    bubbleRight: {
-        marginRight: 10
-    },
-    bubbleLeft: {
-        marginLeft: 10
+        backgroundColor: '#F974A0',
+        padding: 10
     },
     avatar: {
         width: 36,
         height: 36,
         borderRadius: 18,
-        alignSelf: 'flex-start',
-        marginTop: 10
+        position: 'absolute',
+        top: 0,
+    },
+    avatarLeft: {
+        left: -43
+    },
+    avatarRight: {
+        right: -43
     }
 });
 
@@ -44,8 +43,12 @@ export default class Message extends Component {
         super(props);
 
         this.state = {
-            speechBubbleScale: new Animated.Value(0),
+            speechBubbleScale: new Animated.Value(0)
         };
+    }
+
+    shouldComponentUpdate() {
+        return false;
     }
 
     render() {
@@ -59,38 +62,28 @@ export default class Message extends Component {
             color: messageSplit[3]
         };
 
-        Animated.timing(this.state.speechBubbleScale, {toValue: 1, duration: 200, easing: Easing.out(Easing.quad) }).start();
+        Animated.sequence([
+            Animated.timing(this.state.speechBubbleScale, {toValue: 1, duration: 200 })
+        ]).start();
 
         if (profile.id === message.id) {
-            let overflowHack = {};
-            if (message.text.length >= 45) {
-                overflowHack = { flex: 1 };
-            }
             return (
                 <View style={[styles.bubbleWrapper, styles.bubbleWrapperRight]}>
-                    <View style={overflowHack}>
-                        <Animated.Text style={[styles.speechBubble, styles.bubbleRight, {transform: [{scale: this.state.speechBubbleScale}]}]}>
-                            { message.text }
-                        </Animated.Text>
-                    </View>
+                    <Animated.Text style={[styles.speechBubble, {transform: [{scale: this.state.speechBubbleScale}]}]}>
+                        { message.text }
+                    </Animated.Text>
                     <Image style={[styles.avatar, styles.avatarRight]} source={{uri: message.url }} />
                 </View>
             );
         }
 
-        let overflowHack = {};
-        if (message.text.length >= 45) {
-            overflowHack = { flex: 1 };
-        }
         const speechBubbleColor = { backgroundColor: message.color };
         return (
             <View style={[styles.bubbleWrapper, styles.bubbleWrapperLeft]}>
                 <Image style={[styles.avatar, styles.avatarLeft ]} source={message.id === 'server' ? serverImg : {uri: message.url} }/>
-                <View style={overflowHack}>
-                    <Text style={[styles.speechBubble, speechBubbleColor, styles.bubbleLeft]}>
-                        { message.text }
-                    </Text>
-                </View>
+                <Text style={[styles.speechBubble, speechBubbleColor]}>
+                    { message.text }
+                </Text>
             </View>
         );
     }
